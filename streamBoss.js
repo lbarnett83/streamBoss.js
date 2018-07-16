@@ -3,6 +3,7 @@
     var baseBossHp = $.getSetIniDbNumber('streamBoss', 'baseBossHp',1400000),
         baseChatHp = $.getSetIniDbNumber('streamBoss', 'baseChatHp', 100000),
         maxDamage = $.getSetIniDbNumber('streamBoss', 'maxDamage', 10000),
+        minDamage = $.getSetIniDbNumber('streamBoss', 'minDamage', 100),
         bossHp = $.getSetIniDbNumber('streamBoss', 'bossHp', baseBossHp),
         chatHp = $.getSetIniDbNumber('streamBoss', 'chatHp', baseChatHp),
         missChance = $.getSetIniDbNumber('streamBoss', 'missChance', 10),
@@ -36,13 +37,13 @@
             var damage = $.randRange(maxDamage, (maxDamage * critMultiplier));
             hitType = 2;
         } else if (outcome == 1) { // Boss abosorbs
-            damage = $.randRange(1, maxDamage);
+            damage = $.randRange(minDamage, maxDamage);
             hitType = 4;
         } else if (outcome == 100) { // Max damage crit
             damage = maxDamage * critMultiplier;
             hitType = 5;
         } else { // Normal Hit
-            damage = $.randRange(1, maxDamage);
+            damage = $.randRange(minDamage, maxDamage);
             hitType = 3;
         }
         bossHp = ((hitType == 4) ? (bossHp + damage) : (bossHp - damage)); 
@@ -123,13 +124,13 @@
             var damage = $.randRange(maxDamage, (maxDamage * critMultiplier));
             hitType = 2;
         } else if (outcome == 1) { // Boss abosorbs
-            damage = $.randRange(1, maxDamage);
+            damage = $.randRange(minDamage, maxDamage);
             hitType = 4;
         } else if (outcome == 100) { // Max damage crit
             damage = maxDamage * critMultiplier;
             hitType = 5;
         } else { // Normal Hit
-            damage = $.randRange(1, maxDamage);
+            damage = $.randRange(minDamage, maxDamage);
             hitType = 3;
         }
         chatHp = ((hitType == 4) ? (chatHp + damage) : (chatHp - damage)); 
@@ -219,9 +220,28 @@
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss maxdamage [value].  Maximum damage a normal hit can do! Minimum: 10 Current value: ' + maxDamage);
                         return;
                     }
+                    if (actionArg1 < minDamage) {
+                    	$.say($.whisperPrefix(sender) + 'ERROR: maxDamage value cannot greater than minDamage value. Current minDamage value: ' + minDamage);
+                    	return;
+                    }
                     maxDamage = actionArg1;
                     $.say($.whisperPrefix(sender) + 'Maximum damage set to ' + maxDamage +'.');
                     $.inidb.set('streamBoss', 'maxDamage', maxDamage);
+                    return;
+                }
+
+                if (action.equalsIgnoreCase('mindamage')) {
+                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 1) {
+                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss mindamage [value].  Minimum damage a normal hit can do! Minimum: 1 Current value: ' + minDamage);
+                        return;
+                    }
+                    if (actionArg1 > maxDamage) {
+                    	$.say($.whisperPrefix(sender) + 'ERROR: minDamage value cannot greater than maxDamage value. Current maxDamage value: ' + maxDamage);
+                    	return;
+                    }
+                    minDamage = actionArg1;
+                    $.say($.whisperPrefix(sender) + 'Minimum damage set to ' + minDamage +'.');
+                    $.inidb.set('streamBoss', 'minDamage', minDamage);
                     return;
                 }
                 
@@ -333,6 +353,7 @@
             $.registerChatSubcommand('streamboss', 'basebosshp', 1);
             $.registerChatSubcommand('streamboss', 'basechathp', 1);
             $.registerChatSubcommand('streamboss', 'maxdamage', 1);
+            $.registerChatSubcommand('streamboss', 'mindamage', 1);
             $.registerChatSubcommand('streamboss', 'misschance', 1);
             $.registerChatSubcommand('streamboss', 'critchance', 1);
             $.registerChatSubcommand('streamboss', 'critmultiplier', 1);
