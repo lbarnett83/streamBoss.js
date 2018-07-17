@@ -317,7 +317,7 @@
                 		$.say($.whisperPrefix(sender) + 'Usage: !streamboss victorysound [audiohook].  Set an audiohook to play when the boss is killed.  Current sound: ' + victorySound);
                 		return;
                 	}
-                	if (!audioHookExists(actionArg1)) {
+                	if (!$.audioHookExists(actionArg1)) {
                 		$.say($.whisperPrefix(sender) + 'That is not a valid audiohook.');
                 		return;
                 	}
