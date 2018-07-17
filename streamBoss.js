@@ -14,7 +14,7 @@
         fastAttack = $.getSetIniDbNumber('streamBoss', 'fastAttack', 1),
         autoAttack = $.getSetIniDbBoolean('streamBoss', 'autoAttack', false),
         victorySound = $.getSetIniDbString('streamBoss', 'victorySound', 'applause'),
-        victoryToggle = $getSetIniDbBoolean('streamBoss', 'victoryToggle', false),
+        victoryToggle = $.getSetIniDbBoolean('streamBoss', 'victoryToggle', false),
         attackInterval,
         lastAttack = 0,
         progress = 0;
