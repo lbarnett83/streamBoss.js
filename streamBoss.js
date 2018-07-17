@@ -67,6 +67,7 @@
         if (bossHp < 0) {
             bossHp = 0;
             output = output + ' The boss has been defeated!!!!';
+            $.panelsocketserver.triggerAudioPanel("victoryff.swf");
             autoAttack = false;
             $.inidb.set('streamBoss', 'autoAttack', autoAttack);
         } else if (bossHp > baseBossHp + (baseBossHp * 0.15)) {
