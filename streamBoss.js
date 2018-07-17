@@ -190,7 +190,7 @@
         if (command.equalsIgnoreCase('streamboss')) {
             actionArg1 = parseInt(args[1]);
             if (!action) {
-                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | misschance | critchance | critmultiplier | reset | autoattack | fastattack | slowattack ] (value)');
+                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | mindamage | misschance | critchance | critmultiplier | reset | autoattack | fastattack | slowattack ] (value)');
                 return;
             } else {
                 if (action.equalsIgnoreCase('basebosshp')) {
