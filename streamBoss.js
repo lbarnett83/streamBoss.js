@@ -67,6 +67,8 @@
         if (bossHp < 0) {
             bossHp = 0;
             output = output + ' The boss has been defeated!!!!';
+            autoAttack = false;
+            $.inidb.set('streamBoss', 'autoAttack', autoAttack);
         } else if (bossHp > baseBossHp + (baseBossHp * 0.15)) {
             bossHp = baseBossHp + (baseBossHp * 0.15);
             output = output + ' Boss HP maxed! Boss Health Remaining: ' + bossHp + ' HP!';
@@ -153,7 +155,9 @@
         }
         if (chatHp < 0) {
             chatHp = 0;
-            output = output + ' The boss has been defeated!!!!';
+            output = output + ' Chat has been defeated!!!!';
+            autoAttack = false;
+            $.inidb.set('streamBoss', 'autoAttack', autoAttack);
         } else if (chatHp > baseChatHp + (baseChatHp * 0.15)) {
             chatHp = baseChatHp + (baseChatHp * 0.15);
             output = output + ' Chat HP maxed! Chat Health Remaining: ' + chatHp + ' HP!';
@@ -316,8 +320,10 @@
                 if (action.equalsIgnoreCase('reset')) {
                     bossHp = baseBossHp;
                     chatHp = baseChatHp;
+            		autoAttack = false;
+            		$.inidb.set('streamBoss', 'autoAttack', autoAttack);
                     writeFiles();
-                    $.say($.whisperPrefix(sender) + 'The HP of both chat and boss hass been restored!!!');
+                    $.say($.whisperPrefix(sender) + 'The HP of both chat and boss hass been restored and the boss will now begin attacking again!!!');
                     return;
                 }
             }
