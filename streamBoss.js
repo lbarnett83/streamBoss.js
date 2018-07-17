@@ -301,12 +301,21 @@
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss slowattack [value].  The longest time possible, in minutes, between boss attacks. Minimum: 10 Current value: ' + slowAttack + ' minutes.');
                         return;
                     }
-                    slowAttack= actionArg1;
+                    slowAttack = actionArg1;
                     $.say($.whisperPrefix(sender) + 'Longest attack interval set to ' + slowAttack + ' minutes.');
                     attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                     $.inidb.set('streamBoss', 'slowAttack', slowAttack);
                     return;
-                }                
+                }
+
+                if (action.equalsIgnoreCase('victorysound')) {
+                	if (!actionArg1) {
+                		return;
+                	}
+                	victorySound = actionArg1;
+                	$.inidb.set('streamBoss', 'victorySound', victorySound);
+                	return;
+                }               
                 
                 if (action.equalsIgnoreCase('autoattack')) {
                 	if (!autoAttack) {
@@ -319,6 +328,7 @@
                 	$.inidb.set('streamBoss', 'autoAttack', autoAttack);
                 	return;
                 }
+
                 if (action.equalsIgnoreCase('reset')) {
                     bossHp = baseBossHp;
                     chatHp = baseChatHp;
@@ -366,6 +376,7 @@
             $.registerChatSubcommand('streamboss', 'critchance', 1);
             $.registerChatSubcommand('streamboss', 'critmultiplier', 1);
             $.registerChatSubcommand('streamboss', 'reset', 1);
+            $.registerChatSubcommand('streamboss', 'victorysound', 1);
             $.registerChatSubcommand('streamboss', 'autoattack', 1);
             $.registerChatSubcommand('streamboss', 'slowattack', 1);
             $.registerChatSubcommand('streamboss', 'fastattack', 1);
