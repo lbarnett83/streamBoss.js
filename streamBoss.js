@@ -345,10 +345,10 @@
     }, 15e3);
    
     $.bind('initReady', function() {
-            $.registerChatCommand('./games/streamBoss.js', 'attack', 7);
-            $.registerChatCommand('./games/streamBoss.js', 'streamboss', 1);
-            $.registerChatCommand('./games/streamBoss.js', 'heal', 7);
-            $.registerChatCommand('./games/streamBoss.js', 'stats', 7);
+            $.registerChatCommand('./custom/streamBoss.js', 'attack', 7);
+            $.registerChatCommand('./custom/streamBoss.js', 'streamboss', 1);
+            $.registerChatCommand('./custom/streamBoss.js', 'heal', 7);
+            $.registerChatCommand('./custom/streamBoss.js', 'stats', 7);
             
             $.registerChatSubcommand('streamboss', 'basebosshp', 1);
             $.registerChatSubcommand('streamboss', 'basechathp', 1);
