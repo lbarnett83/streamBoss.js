@@ -13,6 +13,7 @@
         slowAttack = $.getSetIniDbNumber('streamBoss', 'slowAttack', 5),
         fastAttack = $.getSetIniDbNumber('streamBoss', 'fastAttack', 1),
         autoAttack = $.getSetIniDbBoolean('streamBoss', 'autoAttack', false),
+        victorySound = $.getSetIniDbString('streamBoss', 'victorySound', 'applause'),
         attackInterval,
         lastAttack = 0,
         progress = 0;
@@ -67,7 +68,7 @@
         if (bossHp < 0) {
             bossHp = 0;
             output = output + ' The boss has been defeated!!!!';
-            $.panelsocketserver.triggerAudioPanel("victoryff.swf");
+            $.panelsocketserver.triggerAudioPanel(victorySound);
             autoAttack = false;
             $.inidb.set('streamBoss', 'autoAttack', autoAttack);
         } else if (bossHp > baseBossHp + (baseBossHp * 0.15)) {
