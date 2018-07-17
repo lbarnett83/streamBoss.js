@@ -14,6 +14,7 @@
         fastAttack = $.getSetIniDbNumber('streamBoss', 'fastAttack', 1),
         autoAttack = $.getSetIniDbBoolean('streamBoss', 'autoAttack', false),
         victorySound = $.getSetIniDbString('streamBoss', 'victorySound', 'applause'),
+        victoryToggle = $getSetIniDbBoolean('streamBoss', 'victoryToggle', false),
         attackInterval,
         lastAttack = 0,
         progress = 0;
@@ -68,7 +69,9 @@
         if (bossHp < 0) {
             bossHp = 0;
             output = output + ' The boss has been defeated!!!!';
-            $.panelsocketserver.triggerAudioPanel(victorySound);
+            if (victoryToggle) {
+            	$.panelsocketserver.triggerAudioPanel(victorySound);
+            }
             autoAttack = false;
             $.inidb.set('streamBoss', 'autoAttack', autoAttack);
         } else if (bossHp > baseBossHp + (baseBossHp * 0.15)) {
@@ -178,7 +181,8 @@
             command = event.getCommand(),
             args = event.getArgs(),
             action = args[0],
-            actionArg1;
+            modifier,
+            actionArg1 = args[1];
             
         if (command.equalsIgnoreCase('attack')) {
             if (chatHp == 0) {
@@ -194,102 +198,102 @@
         }
 
         if (command.equalsIgnoreCase('streamboss')) {
-            actionArg1 = parseInt(args[1]);
+            modifier = parseInt(actionArg1);
             if (!action) {
-                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | mindamage | misschance | critchance | critmultiplier | reset | autoattack | fastattack | slowattack ] (value)');
+                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | mindamage | misschance | critchance | critmultiplier | reset | autoattack | fastattack | slowattack | victorysound | victorytoggle ] (value)');
                 return;
             } else {
                 if (action.equalsIgnoreCase('basebosshp')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 100) {
+                    if (isNaN(modifier) || !modifier || modifier < 100) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss basebosshp [value].  HP count the boss starts at! Minimum: 100 Current value: ' + baseBossHp);
                         return;
                     }
-                    baseBossHp = actionArg1;
+                    baseBossHp = modifier;
                     $.say($.whisperPrefix(sender) + 'Base Boss HP set to ' + baseBossHp +'.');
                     $.inidb.set('streamBoss', 'baseBossHp', baseBossHp);
                     return;
                 }
                 
                 if (action.equalsIgnoreCase('basechathp')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 100) {
+                    if (isNaN(modifier) || !modifier || modifier < 100) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss basechathp [value].  HP count the chat starts at! Minmum: 100 Current value: ' + baseChatHp);
                         return;
                     }
-                    baseChatHp = actionArg1;
+                    baseChatHp = modifier;
                     $.say($.whisperPrefix(sender) + 'Base Chat HP set to ' + baseChatHp +'.');
                     $.inidb.set('streamBoss', 'baseChatHp', baseChatHp);
                     return;
                 }
                 
                 if (action.equalsIgnoreCase('maxdamage')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 10) {
+                    if (isNaN(modifier) || !modifier || modifier < 10) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss maxdamage [value].  Maximum damage a normal hit can do! Minimum: 10 Current value: ' + maxDamage);
                         return;
                     }
-                    if (actionArg1 < minDamage) {
+                    if (modifier < minDamage) {
                     	$.say($.whisperPrefix(sender) + 'ERROR: maxDamage value cannot greater than minDamage value. Current minDamage value: ' + minDamage);
                     	return;
                     }
-                    maxDamage = actionArg1;
+                    maxDamage = modifier;
                     $.say($.whisperPrefix(sender) + 'Maximum damage set to ' + maxDamage +'.');
                     $.inidb.set('streamBoss', 'maxDamage', maxDamage);
                     return;
                 }
 
                 if (action.equalsIgnoreCase('mindamage')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 1) {
+                    if (isNaN(modifier) || !modifier || modifier < 1) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss mindamage [value].  Minimum damage a normal hit can do! Minimum: 1 Current value: ' + minDamage);
                         return;
                     }
-                    if (actionArg1 > maxDamage) {
+                    if (modifier > maxDamage) {
                     	$.say($.whisperPrefix(sender) + 'ERROR: minDamage value cannot greater than maxDamage value. Current maxDamage value: ' + maxDamage);
                     	return;
                     }
-                    minDamage = actionArg1;
+                    minDamage = modifier;
                     $.say($.whisperPrefix(sender) + 'Minimum damage set to ' + minDamage +'.');
                     $.inidb.set('streamBoss', 'minDamage', minDamage);
                     return;
                 }
                 
                 if (action.equalsIgnoreCase('misschance')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 > 25) {
+                    if (isNaN(modifier) || !modifier || modifier > 25) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss misschance [value].  Percentage chance of an attack missing! Maximum: 25 Current value: ' + missChance + '%');
                         return;
                     }
-                    missChance = actionArg1;
+                    missChance = modifier;
                     $.say($.whisperPrefix(sender) + 'Miss percentage set to ' + missChance +'%.');
                     $.inidb.set('streamBoss', 'missChance', missChance);
                     return;
                 }
                 
                 if (action.equalsIgnoreCase('critchance')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 > 25) {
+                    if (isNaN(modifier) || !modifier || modifier > 25) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss critchance [value].  Percentage chance of an attack being a critical strike! Maximum: 25 Current value: ' + critChance +'%');
                         return;
                     }
-                    critChance = actionArg1;
+                    critChance = modifier;
                     $.say($.whisperPrefix(sender) + 'Critical hit percentage set to ' + critChance +'%.');
                     $.inidb.set('streamBoss', 'critChance', critChance);
                     return;
                 }
                 
                 if (action.equalsIgnoreCase('critmultiplier')) {
-                    if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 2 || actionArg1 > 10) {
+                    if (isNaN(modifier) || !modifier || modifier < 2 || modifier > 10) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss critmultiplier [value].  Multiplys max damage in the event of a critical hit! Range: 2-10 Current value: ' + critMultiplier);
                         return;
                     }
-                    critMultiplier = actionArg1;
+                    critMultiplier = modifier;
                     $.say($.whisperPrefix(sender) + 'Critical Hit multiplier set to ' + critMultiplier +'.');
                     $.inidb.set('streamBoss', 'critMultiplier', critMultiplier);
                     return;
                 }
 
                 if (action.equalsIgnoreCase('fastattack')) {
-                	if (isNaN(actionArg1) || !actionArg1 || actionArg1 < 1) {
+                	if (isNaN(modifier) || !modifier || modifier < 1) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss fastattack [value].  The shortest time possible, in minutes, between boss attacks. Minimum: 1 Current value: ' + fastAttack + ' minutes.');
                         return;
                     }
-                    fastAttack= actionArg1;
+                    fastAttack= modifier;
                     $.say($.whisperPrefix(sender) + 'Shortest attack interval set to ' + fastAttack + ' minutes.');
                     attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                     $.inidb.set('streamBoss', 'fastAttack', fastAttack);
@@ -297,11 +301,11 @@
                 }
 
                 if (action.equalsIgnoreCase('slowattack')) {
-                	if (isNaN(actionArg1) || !actionArg1 || actionArg1 > 10 ) {
+                	if (isNaN(modifier) || !modifier || modifier > 10 ) {
                         $.say($.whisperPrefix(sender) + 'Usage: !streamboss slowattack [value].  The longest time possible, in minutes, between boss attacks. Minimum: 10 Current value: ' + slowAttack + ' minutes.');
                         return;
                     }
-                    slowAttack = actionArg1;
+                    slowAttack = modifier;
                     $.say($.whisperPrefix(sender) + 'Longest attack interval set to ' + slowAttack + ' minutes.');
                     attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                     $.inidb.set('streamBoss', 'slowAttack', slowAttack);
@@ -310,13 +314,31 @@
 
                 if (action.equalsIgnoreCase('victorysound')) {
                 	if (!actionArg1) {
+                		$.say($.whisperPrefix(sender) + 'Usage: !streamboss victorysound [audiohook].  Set an audiohook to play when the boss is killed.  Current sound: ' + victorySound);
                 		return;
                 	}
+                	if (!audioHookExists(actionArg1)) {
+                		$.say($.whisperPrefix(sender) + 'That is not a valid audiohook.');
+                		return;
+                	}
+                	$.say($.whisperPrefix(sender) + 'Changing victory theme to: ' + actionArg1);
                 	victorySound = actionArg1;
                 	$.inidb.set('streamBoss', 'victorySound', victorySound);
                 	return;
                 }               
                 
+                if (action.equalsIgnoreCase('victorytoggle')) {
+                	if (!victoryToggle) {
+                		victoryToggle = true;
+                		$.say($.whisperPrefix(sender) + 'The victory sound: ' + victorySound + ' will now be played when the boss is defeated.');
+                	} else {
+                		victoryToggle = false;
+                		$.say($.whisperPrefix(sender) + 'The victory sound will not be played.');
+                	}
+                	$.inidb.set('streamBoss', 'victoryToggle', victoryToggle);
+                	return;
+                }
+
                 if (action.equalsIgnoreCase('autoattack')) {
                 	if (!autoAttack) {
                 		autoAttack = true;
@@ -377,6 +399,7 @@
             $.registerChatSubcommand('streamboss', 'critmultiplier', 1);
             $.registerChatSubcommand('streamboss', 'reset', 1);
             $.registerChatSubcommand('streamboss', 'victorysound', 1);
+            $.registerChatSubcommand('streamboss', 'victorytoggle', 1);
             $.registerChatSubcommand('streamboss', 'autoattack', 1);
             $.registerChatSubcommand('streamboss', 'slowattack', 1);
             $.registerChatSubcommand('streamboss', 'fastattack', 1);
