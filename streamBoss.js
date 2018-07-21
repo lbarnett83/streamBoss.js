@@ -15,10 +15,37 @@
         autoAttack = $.getSetIniDbBoolean('streamBoss', 'autoAttack', false),
         victorySound = $.getSetIniDbString('streamBoss', 'victorySound', 'applause'),
         victoryToggle = $.getSetIniDbBoolean('streamBoss', 'victoryToggle', false),
-        attackInterval,
+        bitsMultiplier = $.getSetIniDbNumber('streamBoss', 'bitsMultiplier', 5),
+        attackInterval = 0,
         lastAttack = 0,
         progress = 0;
     
+
+    $.bind('twitchBits', function(event) {
+        var username = event.getUsername(),
+            bits = event.getBits(),
+            damage = parseInt(bits * bitsMultiplier);
+
+        if (bossHp > 0) {
+        	bossHp = bossHp - damage;
+        	if (bossHp <= 0) {
+        		bossHp = 0;        		
+            	if (victoryToggle) {
+            		$.panelsocketserver.triggerAudioPanel(victorySound);
+            	}
+            	autoAttack = false;
+            	$.inidb.set('streamBoss', 'autoAttack', autoAttack);
+        		$.say(username + 'just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage and killing the boss!!!');
+        		writeFiles();
+        		return;
+        	}
+        	$.say(username + 'just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage to the boss!!');
+        	writeFiles();
+        	return;
+        }       
+    });
+
+
     function writeFiles() {
         $.inidb.set('streamBoss', 'bossHp', bossHp);
         $.writeToFile('' + bossHp, baseFileOutputPath + 'bosshp.txt', false);
@@ -200,7 +227,7 @@
         if (command.equalsIgnoreCase('streamboss')) {
             modifier = parseInt(actionArg1);
             if (!action) {
-                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | mindamage | misschance | critchance | critmultiplier | reset | autoattack | fastattack | slowattack | victorysound | victorytoggle ] (value)');
+                $.say($.whisperPrefix(sender) + 'Usage: !streamboss [ basebosshp | basechathp | maxdamage | mindamage | misschance | critchance | critmultiplier | bitsmultipler | reset | autoattack | fastattack | slowattack | victorysound | victorytoggle ] (value)');
                 return;
             } else {
                 if (action.equalsIgnoreCase('basebosshp')) {
@@ -302,13 +329,24 @@
 
                 if (action.equalsIgnoreCase('slowattack')) {
                 	if (isNaN(modifier) || !modifier || modifier > 10 ) {
-                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss slowattack [value].  The longest time possible, in minutes, between boss attacks. Minimum: 10 Current value: ' + slowAttack + ' minutes.');
+                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss slowattack [value].  The longest time possible, in minutes, between boss attacks. Maximum: 10 Current value: ' + slowAttack + ' minutes.');
                         return;
                     }
                     slowAttack = modifier;
                     $.say($.whisperPrefix(sender) + 'Longest attack interval set to ' + slowAttack + ' minutes.');
                     attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                     $.inidb.set('streamBoss', 'slowAttack', slowAttack);
+                    return;
+                }
+
+                if (action.equalsIgnoreCase('bitsmultiplier')) {
+                    if (isNaN(modifier) || !modifier || modifier < 1) {
+                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss bitsmultiplier [value]. Right now, 1 bit will deal ' + bitsMultiplier + ' HP of damage. Adjust this to change.');
+                        return;
+                    }
+                    bitsMultiplier = modifier;
+                    $.say($.whisperPrefix(sender) + 'Each bit will now deal ' + bitsMultiplier +' HP worth of damage to the boss.');
+                    $.inidb.set('streamBoss', 'bitsMultiplier', bitsMultiplier);
                     return;
                 }
 
@@ -357,7 +395,7 @@
             		autoAttack = false;
             		$.inidb.set('streamBoss', 'autoAttack', autoAttack);
                     writeFiles();
-                    $.say($.whisperPrefix(sender) + 'The HP of both chat and boss hass been restored and the boss will now begin attacking again!!!');
+                    $.say($.whisperPrefix(sender) + 'The HP of both chat and boss has been restored and the boss will now begin attacking again!!!');
                     return;
                 }
             }
@@ -397,6 +435,7 @@
             $.registerChatSubcommand('streamboss', 'misschance', 1);
             $.registerChatSubcommand('streamboss', 'critchance', 1);
             $.registerChatSubcommand('streamboss', 'critmultiplier', 1);
+            $.registerChatSubcommand('streamboss', 'bitsmultiplier', 1);
             $.registerChatSubcommand('streamboss', 'reset', 1);
             $.registerChatSubcommand('streamboss', 'victorysound', 1);
             $.registerChatSubcommand('streamboss', 'victorytoggle', 1);
