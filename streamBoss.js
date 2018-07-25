@@ -16,10 +16,41 @@
         victorySound = $.getSetIniDbString('streamBoss', 'victorySound', 'applause'),
         victoryToggle = $.getSetIniDbBoolean('streamBoss', 'victoryToggle', false),
         bitsMultiplier = $.getSetIniDbNumber('streamBoss', 'bitsMultiplier', 5),
-        attackInterval = 0,
+        attackInterval,
         lastAttack = 0,
         progress = 0;
     
+	$.bind('streamLabsDonation', function(event) {
+        var donationJsonStr = event.getJsonString(),
+            JSONObject = Packages.org.json.JSONObject,
+            donationJson = new JSONObject(donationJsonStr);
+
+        var donationID = donationJson.get("donation_id"),
+            donationCreatedAt = donationJson.get("created_at"),
+            donationCurrency = donationJson.getString("currency"),
+            amount = parseFloat(donationJson.getString("amount")),
+            username = donationJson.getString("name"),
+            damage = parseInt((amount * 100) * bitsMultiplier);
+
+        if (bossHp > 0) {
+        	bossHp = bossHp - damage;
+        	if (bossHp <= 0) {
+        		bossHp = 0;        		
+            	if (victoryToggle) {
+            		$.panelsocketserver.triggerAudioPanel(victorySound);
+            	}
+            	autoAttack = false;
+            	$.inidb.set('streamBoss', 'autoAttack', autoAttack);
+        		$.say(username + ' just donated ' + amount + ' ' +donationCurrency + ', dealing ' + damage + ' HP of damage and killing the boss!!!');
+        		writeFiles();
+        		return;
+        	}
+        	$.say(username + ' just donated ' + amount + ' ' + donationCurrency + ', dealing ' + damage + ' HP of damage to the boss!!');
+        	writeFiles();
+        	return;
+        }  
+     });
+
 
     $.bind('twitchBits', function(event) {
         var username = event.getUsername(),
@@ -35,11 +66,11 @@
             	}
             	autoAttack = false;
             	$.inidb.set('streamBoss', 'autoAttack', autoAttack);
-        		$.say(username + 'just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage and killing the boss!!!');
+        		$.say(username + ' just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage and killing the boss!!!');
         		writeFiles();
         		return;
         	}
-        	$.say(username + 'just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage to the boss!!');
+        	$.say(username + ' just cheered ' + bits + ' bits, dealing ' + damage + ' HP of damage to the boss!!');
         	writeFiles();
         	return;
         }       
@@ -129,10 +160,6 @@
     
     function attackCheck() {
     	var now = $.systemTime();
-
-    	if (!$.bot.isModuleEnabled('./games/streamBoss.js')) {
-            return;
-        }
 
         if (!autoAttack) {
         	return;
@@ -341,7 +368,7 @@
 
                 if (action.equalsIgnoreCase('bitsmultiplier')) {
                     if (isNaN(modifier) || !modifier || modifier < 1) {
-                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss bitsmultiplier [value]. Right now, 1 bit will deal ' + bitsMultiplier + ' HP of damage. Adjust this to change.');
+                        $.say($.whisperPrefix(sender) + 'Usage: !streamboss bitsmultiplier [value]. Right now, each 1 cent donated or cheered will deal ' + bitsMultiplier + ' HP of damage. Adjust this to change.');
                         return;
                     }
                     bitsMultiplier = modifier;
@@ -386,14 +413,16 @@
                 		$.say($.whisperPrefix(sender) + 'The bot will no longer auto-attack.');
                 	}
                 	$.inidb.set('streamBoss', 'autoAttack', autoAttack);
+                	attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                 	return;
                 }
 
                 if (action.equalsIgnoreCase('reset')) {
                     bossHp = baseBossHp;
                     chatHp = baseChatHp;
-            		autoAttack = false;
+            		autoAttack = true;
             		$.inidb.set('streamBoss', 'autoAttack', autoAttack);
+            		attackInterval = $.randRange((fastAttack * 6e4), (slowAttack * 6e4));
                     writeFiles();
                     $.say($.whisperPrefix(sender) + 'The HP of both chat and boss has been restored and the boss will now begin attacking again!!!');
                     return;
