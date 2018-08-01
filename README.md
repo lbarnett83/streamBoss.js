@@ -16,11 +16,9 @@ Once either chat or the boss is defeated, the autoattack flag will be set to fal
 
 The module is quite customizable with the following commands:
 
-`!streamboss basebosshp`     - Set the starting HP for the StreamBoss. (Minimum value: 100)
-
-`!streamboss basechathp`     - Set the starting HP for the Chat Room. (Minimum value: 100)
-
-`!streamboss maxdamage`      - The highest amount of damage that a normal attack can do. (Minimum value: 10)
+*!streamboss basebosshp     - Set the starting HP for the StreamBoss. (Minimum value: 100)
+*!streamboss basechathp     - Set the starting HP for the Chat Room. (Minimum value: 100)
+*!streamboss maxdamage      - The highest amount of damage that a normal attack can do. (Minimum value: 10)
 
 `!streamboss mindamage`      - The lowest amount of damage that a normal attack can do. (Minimum value: 1)
 
