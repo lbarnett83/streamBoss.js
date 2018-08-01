@@ -16,19 +16,14 @@ Once either chat or the boss is defeated, the autoattack flag will be set to fal
 
 The module is quite customizable with the following commands:
 
-*!streamboss basebosshp     - Set the starting HP for the StreamBoss. (Minimum value: 100)
-*!streamboss basechathp     - Set the starting HP for the Chat Room. (Minimum value: 100)
-*!streamboss maxdamage      - The highest amount of damage that a normal attack can do. (Minimum value: 10)
-
-`!streamboss mindamage`      - The lowest amount of damage that a normal attack can do. (Minimum value: 1)
-
-`!streamboss misschance`     - The percent of the time an attack will miss. (Maximum: 25)
-
-`!streamboss critchance`     - The percent of the time an attack will a critical hit. (Maximum: 25)
-
-`!streamboss critmultiplier` - The number of times maxdamage get multiplied in the event of a critical hit. (Range: 2-10)
-
-`!streamboss bitsmultipler`  - How much HP every bit, or each penny of a donation, hits the boss for.
+* !streamboss basebosshp     - Set the starting HP for the StreamBoss. (Minimum value: 100)
+* !streamboss basechathp     - Set the starting HP for the Chat Room. (Minimum value: 100)
+* !streamboss maxdamage      - The highest amount of damage that a normal attack can do. (Minimum value: 10)
+* !streamboss mindamage      - The lowest amount of damage that a normal attack can do. (Minimum value: 1)
+* !streamboss misschance     - The percent of the time an attack will miss. (Maximum: 25)
+* !streamboss critchance     - The percent of the time an attack will a critical hit. (Maximum: 25)
+* !streamboss critmultiplier - The number of times maxdamage get multiplied in the event of a critical hit. (Range: 2-10)
+* !streamboss bitsmultipler  - How much HP every bit, or each penny of a donation, hits the boss for.
 
 `!streamboss slowattack`     - The longest time, in minutes, between boss attacks. (Maximum value: 10)
 
