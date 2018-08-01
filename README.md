@@ -24,15 +24,9 @@ The module is quite customizable with the following commands:
 * !streamboss critchance     - The percent of the time an attack will a critical hit. (Maximum: 25)
 * !streamboss critmultiplier - The number of times maxdamage get multiplied in the event of a critical hit. (Range: 2-10)
 * !streamboss bitsmultipler  - How much HP every bit, or each penny of a donation, hits the boss for.
-
-`!streamboss slowattack`     - The longest time, in minutes, between boss attacks. (Maximum value: 10)
-
-`!streamboss fastattack`     - The shortest time, in minutes, between boss attacks. (Minimum value: 1)
-
-`!streamboss autoattack`     - This flag will toggle whether the boss will randomly attack chat.
-
-`!streamboss victorysound`   - Choose which working audiohook should be played when the boss gets defeated.
-
-`!streamboss victorytoggle`  - This flag will toggle whether the audiohook should be played when the boss gets defeated.
-
-`!streamboss reset`          - Resets both boss and chat HP to the base values, and turns autoattack back on.
+* !streamboss slowattack     - The longest time, in minutes, between boss attacks. (Maximum value: 10)
+* !streamboss fastattack     - The shortest time, in minutes, between boss attacks. (Minimum value: 1)
+* !streamboss autoattack     - This flag will toggle whether the boss will randomly attack chat.
+* !streamboss victorysound   - Choose which working audiohook should be played when the boss gets defeated.
+* !streamboss victorytoggle  - This flag will toggle whether the audiohook should be played when the boss gets defeated.
+* !streamboss reset          - Resets both boss and chat HP to the base values, and turns autoattack back on.
