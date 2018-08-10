@@ -242,7 +242,7 @@
             modifier,
             actionArg1 = args[1];
             
-        if (command.equalsIgnoreCase('attack')) {
+        if (command.equalsIgnoreCase('fight')) {
             if (chatHp == 0) {
                 $.say($.whisperPrefix(sender) + 'You cannot attack because chat has been defeated.');
                 return;
