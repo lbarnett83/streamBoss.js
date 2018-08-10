@@ -6,7 +6,7 @@ These files will contain the current value of the HP for both the StreamBoss and
 They can be used to display the status of the current StreamBoss battle on a streaming overlay.  To display
 the contents of a file hosted remotely, use this link in OBS:
 
-http://[host]:[port]/addons/[filename].txt?webauth_ro=[my_key]&refresh
+http://[host]:[port]/addons/[filename].txt?webauth=[my_key]&refresh
 
 replacing anything in the `[]`'s with your info.
 
