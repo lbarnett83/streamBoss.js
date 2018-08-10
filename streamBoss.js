@@ -82,6 +82,10 @@
         $.writeToFile('' + bossHp, baseFileOutputPath + 'bosshp.txt', false);
         $.inidb.set('streamBoss', 'chatHp', chatHp);
         $.writeToFile('' + chatHp, baseFileOutputPath + 'chathp.txt', false);
+        $.inidb.set('streamBoss', 'baseBossHp', baseBossHp);
+        $.writeToFile('' + baseBossHp, baseFileOutputPath + 'basebosshp.txt', false);
+        $.inidb.set('streamBoss', 'baseChatHp', baseChatHp);
+        $.writeToFile('' + baseChatHp, baseFileOutputPath + 'basechathp.txt', false);
     }
 
     function attack(sender) {
