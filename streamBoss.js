@@ -456,7 +456,7 @@
     }, 15e3);
    
     $.bind('initReady', function() {
-            $.registerChatCommand('./custom/streamBoss.js', 'attack', 7);
+            $.registerChatCommand('./custom/streamBoss.js', 'fight', 7);
             $.registerChatCommand('./custom/streamBoss.js', 'streamboss', 1);
             $.registerChatCommand('./custom/streamBoss.js', 'heal', 7);
             $.registerChatCommand('./custom/streamBoss.js', 'stats', 7);
